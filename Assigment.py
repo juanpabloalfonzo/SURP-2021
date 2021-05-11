@@ -19,11 +19,11 @@ config.download = True
 #Importing All MaNGA Data from DPRall Schema
 data=pd.read_csv('CompleteTable.csv')
 
-# my_cube1=Cube('7957-12703')
-maps=Maps('7957-12703')
+my_cube1=Cube('7957-12703')
 
 
-# my_cube2 =Cube('7443-12704')
+
+my_cube2 =Cube('7443-12704')
 
 
 
