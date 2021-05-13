@@ -6,6 +6,7 @@ from marvin import config
 from marvin.tools.cube import Cube
 from marvin.tools.query import Query
 from marvin.utils.datamodel.query.MPL import DR15
+from marvin.utils.general.general import getSpaxel
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -83,12 +84,14 @@ config.download = True
 #Importing All MaNGA Data from DPRall Schema
 data=pd.read_csv('CompleteTable.csv')
 
+
 my_cube1=Cube('7957-12703')
-# my_cube1_flux=my_cube1.flux.value
+central_spaxel1=my_cube1.getSpaxel(0,0)
+
 
 
 my_cube2 =Cube('7443-12704')
-# my_cube2_flux=my_cube2.flux.value
+central_spaxel2=my_cube2.getSpaxel(0,0)
 
 #Condition that galaxy be over mass 10^9 solar units and have redshift between 0 and 0.1 
 sample=np.where((data.loc[:,'nsa_sersic_mass']>10**9) & (data.loc[:,'z']>0) & (data.loc[:,'z']<0.1))
@@ -111,6 +114,9 @@ galaxy_list=np.loadtxt('Query Results',dtype=str)
 #Galaxy Zoo 
 
 #Question 2- Stats for Morphology and Star-Formation Activity 
+
+
+
 
 
 #Question 3- Machine Learning 
