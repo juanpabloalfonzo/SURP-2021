@@ -11,6 +11,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import astropy
+import torch
+from torch.autograd import Variable
 # from .base import VACMixIn
 
 # class GZVAC(VACMixIn):
@@ -71,6 +73,16 @@ import astropy
     #     idx = data["mangaid"] == mangaid
     #     return data[idx]
 
+#Defining class to do linear regession using torch NN 
+class linearRegression(torch.nn.Module):
+    def __init__(self, inputSize, outputSize):
+        super(linearRegression, self).__init__()
+        self.linear = torch.nn.Linear(inputSize, outputSize)
+
+    def forward(self, x):
+        out = self.linear(x)
+        return out
+
 
 
 #set config attributes and turn on global downloads of Marvin data
@@ -87,7 +99,13 @@ data=pd.read_csv('CompleteTable.csv')
 
 my_cube1=Cube('7957-12703')
 central_spaxel1=my_cube1.getSpaxel(0,0)
+map1=my_cube1.getMaps()
+image1=my_cube1.getImage()
 
+image1.plot()
+plt.savefig('Image 1')
+plt.show()
+plt.figure()
 
 
 my_cube2 =Cube('7443-12704')
@@ -120,4 +138,3 @@ galaxy_list=np.loadtxt('Query Results',dtype=str)
 
 
 #Question 3- Machine Learning 
-
