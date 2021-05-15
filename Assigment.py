@@ -83,7 +83,7 @@ class linearRegression(torch.nn.Module):
         out = self.linear(x)
         return out
 
-
+plt.ion()
 
 #set config attributes and turn on global downloads of Marvin data
 config.setRelease('DR15')
@@ -102,6 +102,11 @@ central_spaxel1=my_cube1.getSpaxel(0,0)
 map1=my_cube1.getMaps()
 image1=my_cube1.getImage()
 
+
+central_spaxel1.flux.plot()
+plt.show()
+
+
 image1.plot()
 plt.savefig('Image 1')
 plt.show()
@@ -110,6 +115,9 @@ plt.figure()
 
 my_cube2 =Cube('7443-12704')
 central_spaxel2=my_cube2.getSpaxel(0,0)
+central_spaxel2.flux.plot()
+plt.show()
+plt.figure()
 
 #Condition that galaxy be over mass 10^9 solar units and have redshift between 0 and 0.1 
 sample=np.where((data.loc[:,'nsa_sersic_mass']>10**9) & (data.loc[:,'z']>0) & (data.loc[:,'z']<0.1))
