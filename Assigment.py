@@ -185,5 +185,65 @@ plt.colorbar().set_label('Sersic n')
 plt.show()
 
 
-
 #Question 3- Machine Learning 
+
+sSFR=SFR/mass #Calculating sSFR
+
+log_sSFR=np.log10(sSFR)
+
+log_sSFR=np.array(log_sSFR,dtype=np.float32).reshape(-1,1) #Changing data from pd dataframe to arrays to make it easier to feed to Torch 
+n=np.array(n,dtype=np.float32).reshape(-1,1)
+
+n=np.log10(n)
+
+inputDim=1
+outputDim=1 
+learningRate=0.01
+epochs=100
+
+model = linearRegression(inputDim, outputDim)
+##### For GPU #######
+if torch.cuda.is_available():
+    model.cuda()
+
+criterion = torch.nn.MSELoss() 
+optimizer = torch.optim.SGD(model.parameters(), lr=learningRate)
+
+for epoch in range(epochs):
+    # Converting inputs and labels to Variable
+    if torch.cuda.is_available():
+        inputs = Variable(torch.from_numpy(log_sSFR).cuda())
+        labels = Variable(torch.from_numpy(n).cuda())
+    else:
+        inputs = Variable(torch.from_numpy(log_sSFR))
+        labels = Variable(torch.from_numpy(n))
+
+    # Clear gradient buffers because we don't want any gradient from previous epoch to carry forward, dont want to cummulate gradients
+    optimizer.zero_grad()
+
+    # get output from the model, given the inputs
+    outputs = model(inputs)
+
+    # get loss for the predicted output
+    loss = criterion(outputs, labels)
+    print(loss)
+    # get gradients w.r.t to parameters
+    loss.backward()
+
+    # update parameters
+    optimizer.step()
+
+    print('epoch {}, loss {}'.format(epoch, loss.item()))
+
+with torch.no_grad(): # we don't need gradients in the testing phase
+    if torch.cuda.is_available():
+        predicted = model(Variable(torch.from_numpy(log_sSFR).cuda())).cpu().data.numpy()
+    else:
+        predicted = model(Variable(torch.from_numpy(log_sSFR))).data.numpy()
+    print(predicted)
+
+plt.clf()
+plt.plot(log_sSFR, n, 'go', label='True data', alpha=0.5)
+plt.plot(log_sSFR, predicted, '--', label='Predictions', alpha=0.5)
+plt.legend(loc='best')
+plt.show()
