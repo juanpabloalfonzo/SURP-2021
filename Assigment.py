@@ -167,6 +167,8 @@ ha_flux=galaxies.loc[:,'emline_gflux_tot_ha_6564']
 
 n=galaxies.loc[:,'nsa_sersic_n']
 
+plt.figure()
+
 #Plotting the relevant data 
 plt.title('log SFR vs log Mass of Galaxies in MaNGA')
 plt.xlabel(r'$log(M/M_{\odot})$')
@@ -175,6 +177,7 @@ plt.scatter(log_mass,log_SFR, c=ha_flux, vmin=-2, vmax=-0.8, cmap='viridis', alp
 plt.hist2d(log_mass,log_SFR, cmap='viridis', bins=(np.linspace(7,13,51),np.linspace(-5.5,1,51)))
 plt.colorbar().set_label('Ha Flux')
 plt.show()
+plt.figure()
 
 plt.title('log SFR vs log Mass of Galaxies in MaNGA')
 plt.xlabel(r'$log(M/M_{\odot})$')
@@ -183,9 +186,12 @@ plt.scatter(log_mass,log_SFR, c=n, vmin=-2, vmax=-0.8, cmap='viridis', alpha=0.1
 plt.hist2d(log_mass,log_SFR, cmap='viridis', bins=(np.linspace(7,13,51),np.linspace(-5.5,1,51)))
 plt.colorbar().set_label('Sersic n')
 plt.show()
-
+plt.figure()
 
 #Question 3- Machine Learning 
+
+
+#Prepare Data
 
 sSFR=SFR/mass #Calculating sSFR
 
@@ -196,20 +202,25 @@ n=np.array(n,dtype=np.float32).reshape(-1,1)
 
 n=np.log10(n)
 
+
+#Model 
 inputDim=1
 outputDim=1 
 learningRate=0.01
-epochs=100
 
 model = linearRegression(inputDim, outputDim)
 ##### For GPU #######
 if torch.cuda.is_available():
     model.cuda()
 
-criterion = torch.nn.MSELoss() 
-optimizer = torch.optim.SGD(model.parameters(), lr=learningRate)
+criterion = torch.nn.BCEWithLogitsLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=learningRate)
 
-for epoch in range(epochs):
+#Training Loop
+epochs=100
+
+
+for epoch in range(epochs): #Forward Pass and loss
     # Converting inputs and labels to Variable
     if torch.cuda.is_available():
         inputs = Variable(torch.from_numpy(log_sSFR).cuda())
@@ -227,7 +238,7 @@ for epoch in range(epochs):
     # get loss for the predicted output
     loss = criterion(outputs, labels)
     print(loss)
-    # get gradients w.r.t to parameters
+    # get gradients w.r.t to parameters, (backward pass)
     loss.backward()
 
     # update parameters
@@ -242,8 +253,11 @@ with torch.no_grad(): # we don't need gradients in the testing phase
         predicted = model(Variable(torch.from_numpy(log_sSFR))).data.numpy()
     print(predicted)
 
-plt.clf()
+
+
+
 plt.plot(log_sSFR, n, 'go', label='True data', alpha=0.5)
 plt.plot(log_sSFR, predicted, '--', label='Predictions', alpha=0.5)
 plt.legend(loc='best')
 plt.show()
+plt.figure()
