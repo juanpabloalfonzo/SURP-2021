@@ -86,7 +86,7 @@ class linearRegression(torch.nn.Module):
 plt.ion()
 
 #set config attributes and turn on global downloads of Marvin data
-config.setRelease('DR15')
+config.setRelease('DR16')
 config.mode = 'local'
 config.download = True
 
@@ -100,7 +100,7 @@ data=pd.read_csv('CompleteTable.csv')
 my_cube1=Cube('7957-12703')
 central_spaxel1=my_cube1.getSpaxel(0,0)
 map1=my_cube1.getMaps()
-image1=my_cube1.getImage()
+image1=Image('7957-12703')
 
 
 central_spaxel1.flux.plot()
@@ -108,16 +108,20 @@ plt.show()
 
 
 image1.plot()
-plt.savefig('Image 1')
 plt.show()
-plt.figure()
+
 
 
 my_cube2 =Cube('7443-12704')
 central_spaxel2=my_cube2.getSpaxel(0,0)
 central_spaxel2.flux.plot()
 plt.show()
-plt.figure()
+
+
+image2=Image('7443-12704')
+image2.plot()
+plt.show()
+
 
 #Condition that galaxy be over mass 10^9 solar units and have redshift between 0 and 0.1 
 sample=np.where((data.loc[:,'nsa_sersic_mass']>10**9) & (data.loc[:,'z']>0) & (data.loc[:,'z']<0.1))
@@ -141,7 +145,44 @@ galaxy_list=np.loadtxt('Query Results',dtype=str)
 
 #Question 2- Stats for Morphology and Star-Formation Activity 
 
+#Pulling mass and SFR for galaxies from Cas Jobs table
+galaxy_index=np.zeros(len(galaxy_list))
 
+for i in range (len(galaxy_list)):
+    galaxy_index[i]=np.where(data.loc[:,'mangaid']==galaxy_list[i])[0][0]
+
+galaxy_index=np.array(galaxy_index,dtype=int)
+
+
+
+galaxies=data.iloc[galaxy_index]
+
+mass=galaxies.loc[:,'nsa_sersic_mass']
+log_mass=np.log10(mass)
+
+SFR=galaxies.loc[:,'sfr_tot']
+log_SFR=np.log10(SFR)
+
+ha_flux=galaxies.loc[:,'emline_gflux_tot_ha_6564']
+
+n=galaxies.loc[:,'nsa_sersic_n']
+
+#Plotting the relevant data 
+plt.title('log SFR vs log Mass of Galaxies in MaNGA')
+plt.xlabel(r'$log(M/M_{\odot})$')
+plt.ylabel(r'$log(SFR/M_{\odot})$')
+plt.scatter(log_mass,log_SFR, c=ha_flux, vmin=-2, vmax=-0.8, cmap='viridis', alpha=0.1)
+plt.hist2d(log_mass,log_SFR, cmap='viridis', bins=(np.linspace(7,13,51),np.linspace(-5.5,1,51)))
+plt.colorbar().set_label('Ha Flux')
+plt.show()
+
+plt.title('log SFR vs log Mass of Galaxies in MaNGA')
+plt.xlabel(r'$log(M/M_{\odot})$')
+plt.ylabel(r'$log(SFR/M_{\odot})$')
+plt.scatter(log_mass,log_SFR, c=n, vmin=-2, vmax=-0.8, cmap='viridis', alpha=0.1)
+plt.hist2d(log_mass,log_SFR, cmap='viridis', bins=(np.linspace(7,13,51),np.linspace(-5.5,1,51)))
+plt.colorbar().set_label('Sersic n')
+plt.show()
 
 
 
