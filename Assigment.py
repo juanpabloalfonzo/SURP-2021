@@ -190,7 +190,6 @@ plt.figure()
 
 #Question 3- Machine Learning 
 
-
 #Prepare Data
 
 sSFR=SFR/mass #Calculating sSFR
@@ -206,7 +205,7 @@ n=np.log10(n)
 #Model 
 inputDim=1
 outputDim=1 
-learningRate=0.01
+learningRate=0.1
 
 model = linearRegression(inputDim, outputDim)
 ##### For GPU #######
@@ -217,9 +216,10 @@ criterion = torch.nn.SmoothL1Loss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learningRate)
 
 #Training Loop
-epochs=100
+epochs=2000
 
-
+epoch_array=np.zeros(epochs)
+loss_array=np.zeros(epochs)
 for epoch in range(epochs): #Forward Pass and loss
     # Converting inputs and labels to Variable
     if torch.cuda.is_available():
@@ -244,6 +244,9 @@ for epoch in range(epochs): #Forward Pass and loss
     # update parameters
     optimizer.step()
 
+    epoch_array[epoch]=epoch 
+    loss_array[epoch]=loss.item()
+
     print('epoch {}, loss {}'.format(epoch, loss.item()))
 
 with torch.no_grad(): # we don't need gradients in the testing phase
@@ -255,13 +258,19 @@ with torch.no_grad(): # we don't need gradients in the testing phase
 
 
 
-
+plt.clf()
 plt.plot(log_sSFR, n, 'go', label='True data', alpha=0.5)
 plt.plot(log_sSFR, predicted, '--', label='Predictions', alpha=0.5)
 plt.legend(loc='best')
 plt.show()
 plt.figure()
 
+plt.title('Loss vs Epoch for 1D Linear Regression')
+plt.plot(epoch_array,loss_array)
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.show()
+plt.figure()
 
 
 #2 input 1 ouput linear regression with no CUDA
@@ -316,5 +325,12 @@ plt.plot(log_mass_sfr[1,:], n, 'bo', label='True data log n vs SFR', alpha=0.5)
 plt.plot(log_mass_sfr[0,:], A.detach().numpy()[0][0]*log_mass_sfr[0,:]+b.item(), '--', label='Predictions of log n vs Mass', alpha=0.5)
 plt.plot(log_mass_sfr[1,:], A.detach().numpy()[0][1]*log_mass_sfr[1,:]+b.item(), '--', label='Predictions of log n vs SFR', alpha=0.5)
 plt.legend(loc='best')
+plt.show()
+plt.figure()
+
+plt.title('Loss vs Epoch for 2D Linear Regression')
+plt.plot(epoch_array2,loss_array2)
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
 plt.show()
 plt.figure()
