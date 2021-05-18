@@ -86,7 +86,7 @@ class linearRegression(torch.nn.Module):
 plt.ion()
 
 #set config attributes and turn on global downloads of Marvin data
-config.setRelease('DR16')
+config.setRelease('DR15')
 config.mode = 'local'
 config.download = True
 
@@ -104,23 +104,23 @@ image1=Image('7957-12703')
 
 
 central_spaxel1.flux.plot()
-plt.show()
+# plt.show()
 
 
 image1.plot()
-plt.show()
+# plt.show()
 
 
 
 my_cube2 =Cube('7443-12704')
 central_spaxel2=my_cube2.getSpaxel(0,0)
 central_spaxel2.flux.plot()
-plt.show()
+# plt.show()
 
 
 image2=Image('7443-12704')
 image2.plot()
-plt.show()
+# plt.show()
 
 
 #Condition that galaxy be over mass 10^9 solar units and have redshift between 0 and 0.1 
@@ -213,7 +213,7 @@ model = linearRegression(inputDim, outputDim)
 if torch.cuda.is_available():
     model.cuda()
 
-criterion = torch.nn.BCEWithLogitsLoss()
+criterion = torch.nn.SmoothL1Loss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learningRate)
 
 #Training Loop
