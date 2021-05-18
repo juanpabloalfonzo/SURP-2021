@@ -261,3 +261,60 @@ plt.plot(log_sSFR, predicted, '--', label='Predictions', alpha=0.5)
 plt.legend(loc='best')
 plt.show()
 plt.figure()
+
+
+
+#2 input 1 ouput linear regression with no CUDA
+
+#Two input and one output linear regression 
+
+log_mass_sfr=pd.concat([log_mass,log_SFR],axis=1) #Combining both input variables into one df
+
+log_mass_sfr=np.array(log_mass_sfr,dtype=np.float32).transpose() #Formatting properly for pytorch 
+
+#Defining the model 
+# First we define the trainable parameters A and b 
+A = torch.randn((1, 2), requires_grad=True)
+b = torch.randn(1, requires_grad=True)
+
+def model(x_input):
+    return A.mm(x_input) + b
+
+#Chosing a loss function
+loss= torch.nn.SmoothL1Loss()
+
+### Training the model ###
+
+# Setup the optimizer object, so it optimizes a and b.
+optimizer = torch.optim.Adam([A, b], lr=0.1)
+
+epoch_array2=np.zeros(2000)
+loss_array2=np.zeros(2000)
+# Main optimization loop
+for t in range(2000): #t is epochs
+
+    inputs = Variable(torch.from_numpy(log_mass_sfr))
+    labels = Variable(torch.from_numpy(n))
+
+    # Set the gradients to 0.
+    optimizer.zero_grad()
+    # Compute the current predicted y's from x_dataset
+    y_predicted = model(inputs)
+    # See how far off the prediction is
+    current_loss = loss(y_predicted, labels)
+    # Compute the gradient of the loss with respect to A and b.
+    current_loss.backward()
+    # Update A and b accordingly.
+    optimizer.step()
+
+    epoch_array2[t]=t 
+    loss_array2[t]=current_loss.item()
+    print(f"t = {t}, loss = {current_loss}, A = {A.detach().numpy()}, b = {b.item()}")
+
+plt.plot(log_mass_sfr[0,:], n, 'go', label='True data log n vs Mass', alpha=0.5)
+plt.plot(log_mass_sfr[1,:], n, 'bo', label='True data log n vs SFR', alpha=0.5)
+plt.plot(log_mass_sfr[0,:], A.detach().numpy()[0][0]*log_mass_sfr[0,:]+b.item(), '--', label='Predictions of log n vs Mass', alpha=0.5)
+plt.plot(log_mass_sfr[1,:], A.detach().numpy()[0][1]*log_mass_sfr[1,:]+b.item(), '--', label='Predictions of log n vs SFR', alpha=0.5)
+plt.legend(loc='best')
+plt.show()
+plt.figure()
