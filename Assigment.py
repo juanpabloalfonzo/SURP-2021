@@ -91,7 +91,7 @@ config.mode = 'local'
 config.download = True
 
 
-#Question 1- Marvin 
+########################################################### Question 1- Marvin ############################################
 
 #Importing All MaNGA Data from DPRall Schema
 data=pd.read_csv('CompleteTable.csv')
@@ -143,7 +143,7 @@ galaxy_list=np.loadtxt('Query Results',dtype=str)
 
 #Galaxy Zoo 
 
-#Question 2- Stats for Morphology and Star-Formation Activity 
+################################################## Question 2- Stats for Morphology and Star-Formation Activity #####################################
 
 #Pulling mass and SFR for galaxies from Cas Jobs table
 galaxy_index=np.zeros(len(galaxy_list))
@@ -188,7 +188,7 @@ plt.colorbar().set_label('Sersic n')
 plt.show()
 plt.figure()
 
-#Question 3- Machine Learning 
+####################################### Question 3- Machine Learning ################################################################### 
 
 #Prepare Data
 
@@ -273,7 +273,7 @@ plt.show()
 plt.figure()
 
 
-#2 input 1 ouput linear regression with no CUDA
+################################################ 2 input 1 ouput linear regression with no CUDA #########################################
 
 #Two input and one output linear regression 
 
@@ -334,3 +334,86 @@ plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.show()
 plt.figure()
+
+
+################################################ 2 input 1 ouput linear regression with CUDA #########################################
+
+#Model 
+inputDim=2
+outputDim=1 
+learningRate=0.1
+
+log_mass_sfr=pd.concat([log_mass,log_SFR],axis=1) #Combining both input variables into one df
+
+log_mass_sfr=np.array(log_mass_sfr,dtype=np.float32) #Formatting properly for pytorch 
+
+
+model = torch.nn.Linear(inputDim, outputDim)
+##### For GPU #######
+if torch.cuda.is_available():
+    model.cuda()
+
+criterion = torch.nn.SmoothL1Loss()
+optimizer = torch.optim.Adam(model.parameters(), lr=learningRate)
+
+#Training Loop
+epochs=2000
+
+epoch_array3=np.zeros(epochs)
+loss_array3=np.zeros(epochs)
+for epoch in range(epochs): #Forward Pass and loss
+    # Converting inputs and labels to Variable
+    if torch.cuda.is_available():
+        inputs = Variable(torch.from_numpy(log_mass_sfr).cuda())
+        labels = Variable(torch.from_numpy(n).cuda())
+    else:
+        inputs = Variable(torch.from_numpy(log_mass_sfr))
+        labels = Variable(torch.from_numpy(n))
+
+    # Clear gradient buffers because we don't want any gradient from previous epoch to carry forward, dont want to cummulate gradients
+    optimizer.zero_grad()
+
+    # get output from the model, given the inputs
+    outputs = model(inputs)
+
+    # get loss for the predicted output
+    loss = criterion(outputs, labels)
+    print(loss)
+    # get gradients w.r.t to parameters, (backward pass)
+    loss.backward()
+
+    # update parameters
+    optimizer.step()
+
+    epoch_array3[epoch]=epoch 
+    loss_array3[epoch]=loss.item()
+
+    print('epoch {}, loss {}'.format(epoch, loss.item()))
+
+with torch.no_grad(): # we don't need gradients in the testing phase
+    if torch.cuda.is_available():
+        predicted = model(Variable(torch.from_numpy(log_mass_sfr).cuda())).cpu().data.numpy()
+    else:
+        predicted = model(Variable(torch.from_numpy(log_mass_sfr))).data.numpy()
+    print(predicted)
+
+
+
+plt.clf()
+plt.plot(log_mass_sfr[:,1], n, 'go', label='True data (n vs Mass)', alpha=0.5)
+plt.plot(log_mass_sfr[:,0], n, 'bo', label='True data (n vs SFR)', alpha=0.5)
+plt.plot(log_mass_sfr[:,1], predicted, '--', label='Predictions (n vs Mass)', alpha=0.5)
+plt.plot(log_mass_sfr[:,0], predicted, '--', label='Predictions (n vs SFR)', alpha=0.5)
+plt.legend(loc='best')
+plt.show()
+plt.figure()
+
+plt.title('Loss vs Epoch for 2D Linear Regression (CUDA)')
+plt.plot(epoch_array3,loss_array3)
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.show()
+plt.figure()
+
+######################### 60-20-20 split for train-test-validate##################################
+
