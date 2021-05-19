@@ -1,0 +1,5 @@
+-Mean n in SFR and Mass bins. Makes bins for each and 2D array holding n in each bin combination 
+
+-Brush up on neural network stuff (3B1B Video Series)
+
+-Pratice more NN with adding hidden layers and getting comfortable with torch functions. See how to make/use DataLoader 

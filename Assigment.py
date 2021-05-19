@@ -173,20 +173,21 @@ plt.figure()
 plt.title('log SFR vs log Mass of Galaxies in MaNGA')
 plt.xlabel(r'$log(M/M_{\odot})$')
 plt.ylabel(r'$log(SFR/M_{\odot})$')
-plt.scatter(log_mass,log_SFR, c=ha_flux, vmin=-2, vmax=-0.8, cmap='viridis', alpha=0.1)
-plt.hist2d(log_mass,log_SFR, cmap='viridis', bins=(np.linspace(7,13,51),np.linspace(-5.5,1,51)))
-plt.colorbar().set_label('Ha Flux')
+# plt.hist2d(log_mass,log_SFR, cmap='viridis', bins=(np.linspace(7,13,51),np.linspace(-5.5,1,51)))
+plt.scatter(log_mass,log_SFR, c=np.log10(ha_flux), cmap='magma', alpha=0.9)
+plt.colorbar().set_label('log(Ha Flux)')
 plt.show()
-plt.figure()
 
+
+plt.figure()
 plt.title('log SFR vs log Mass of Galaxies in MaNGA')
 plt.xlabel(r'$log(M/M_{\odot})$')
 plt.ylabel(r'$log(SFR/M_{\odot})$')
-plt.scatter(log_mass,log_SFR, c=n, vmin=-2, vmax=-0.8, cmap='viridis', alpha=0.1)
-plt.hist2d(log_mass,log_SFR, cmap='viridis', bins=(np.linspace(7,13,51),np.linspace(-5.5,1,51)))
+# plt.hist2d(log_mass,log_SFR, cmap='viridis', bins=(np.linspace(7,13,51),np.linspace(-5.5,1,51)))
+plt.scatter(log_mass,log_SFR, c=n.ravel(), cmap='viridis', alpha=0.9)
 plt.colorbar().set_label('Sersic n')
 plt.show()
-plt.figure()
+
 
 ####################################### Question 3- Machine Learning ################################################################### 
 
