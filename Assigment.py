@@ -11,6 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import astropy
+from six import b
 import torch
 from torch.autograd import Variable
 # from .base import VACMixIn
@@ -167,8 +168,23 @@ ha_flux=galaxies.loc[:,'emline_gflux_tot_ha_6564']
 
 n=galaxies.loc[:,'nsa_sersic_n']
 
-plt.figure()
 
+bins_mass=np.arange(np.min(log_mass),np.max(log_mass),0.1)
+bins_SFR=np.linspace(np.min(log_SFR),np.max(log_SFR),num=len(bins_mass))
+
+sersic_n_array=np.zeros([len(bins_SFR),len(bins_mass)])
+for j in range(len(bins_SFR)-1):
+    for i in range(len(bins_mass)-1):
+        if i and j <len(bins_mass):
+            a=np.where((log_SFR>bins_SFR[j]) & (log_SFR<bins_SFR[j+1]) & (log_mass>bins_mass[i]) & (log_mass<bins_mass[i+1]))
+        else:
+            a=np.where((log_SFR>bins_SFR[j-1]) & (log_SFR<bins_SFR[j]) & (log_mass>bins_mass[i-1]) & (log_mass<bins_mass[i]))
+        b=np.mean(n.iloc[a])
+        sersic_n_array[i,j]=b
+
+
+
+plt.figure()
 #Plotting the relevant data 
 plt.title('log SFR vs log Mass of Galaxies in MaNGA')
 plt.xlabel(r'$log(M/M_{\odot})$')
