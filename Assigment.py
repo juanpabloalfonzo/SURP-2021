@@ -9,6 +9,8 @@ from marvin.utils.datamodel.query.MPL import DR15
 from marvin.utils.general.general import getSpaxel
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import colors
+from numpy.core.function_base import linspace
 import pandas as pd
 import astropy
 from six import b
@@ -183,6 +185,15 @@ for j in range(len(bins_SFR)-1):
             a=np.where((log_SFR>bins_SFR[j-1]) & (log_SFR<bins_SFR[j]) & (log_mass>bins_mass[i-1]) & (log_mass<bins_mass[i]))
         b=np.mean(n.iloc[a])
         sersic_n_array[i,j]=b
+
+
+locations=np.arange(0,40,5)
+
+plt.figure()
+plt.imshow(sersic_n_array, cmap='magma')
+plt.colorbar().set_label('Average Sersic n')
+plt.xticks(locations,np.around(bins_mass[locations],1))
+plt.yticks(locations,np.around(bins_SFR[locations],1))
 
 
 
