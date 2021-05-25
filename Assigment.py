@@ -194,6 +194,9 @@ plt.imshow(sersic_n_array, cmap='magma')
 plt.colorbar().set_label('Average Sersic n')
 plt.xticks(locations,np.around(bins_mass[locations],1))
 plt.yticks(locations,np.around(bins_SFR[locations],1))
+plt.xlabel(r'$log(M/M_{\odot})$')
+plt.ylabel(r'$log(SFR/M_{\odot})$')
+plt.title('Average Sersic n in Various Regions of the log SFR vs log Mass plot')
 
 
 
