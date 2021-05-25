@@ -14,6 +14,8 @@ import astropy
 from six import b
 import torch
 from torch.autograd import Variable
+from torch.utils.data import DataLoader
+from torch.utils.data import TensorDataset
 # from .base import VACMixIn
 
 # class GZVAC(VACMixIn):
@@ -434,3 +436,119 @@ plt.figure()
 
 ######################### 60-20-20 split for train-test-validate##################################
 
+#Working with making a neural net with a hidden layer
+
+class linearRegression(torch.nn.Module):
+    def __init__(self, inputSize, outputSize):
+        super(linearRegression, self).__init__()
+        self.linear = torch.nn.Linear(inputSize, outputSize)
+
+    def forward(self, x):
+        x1 = self.linear(x)
+        out = self.linear(x1)
+        return out
+
+
+#Importing clean data 
+
+sSFR=SFR/mass #Calculating sSFR
+log_sSFR=np.log10(sSFR)
+log_sSFR=np.array(log_sSFR,dtype=np.float32)
+
+n=galaxies.loc[:,'nsa_sersic_n']
+n=np.log10(n)
+n=np.array(n,dtype=np.float32)
+
+#Creating paritions in the data to define the 60-20-20 split 
+train_sSFR=torch.from_numpy(log_sSFR[0:2183].reshape(-1,1)).to('cuda:0')
+test_sSFR=torch.from_numpy(log_sSFR[2183:2910].reshape(-1,1)).to('cuda:0')
+validate_sSFR=torch.from_numpy(log_sSFR[2910:3638].reshape(-1,1)).to('cuda:0')
+
+train_n=torch.from_numpy(n[0:2183].reshape(-1,1)).to('cuda:0')
+test_n=torch.from_numpy(n[2183:2910].reshape(-1,1)).to('cuda:0')
+validate_n=torch.from_numpy(n[2910:3638].reshape(-1,1)).to('cuda:0')
+
+#Creating Tensor Datasets 
+train_dataset= TensorDataset(train_sSFR,train_n)
+test_dataset= TensorDataset(test_sSFR,test_n)
+validate_dataset=TensorDataset(validate_sSFR,validate_n)
+
+#Putting these partitions into a pytorch DataLoader 
+train_dataloader= DataLoader(train_dataset,batch_size=len(train_sSFR),shuffle=True)
+test_dataloader=DataLoader(test_dataset, batch_size=len(test_sSFR), shuffle=True)
+validate_dataloader= DataLoader(validate_dataset, batch_size=len(validate_sSFR), shuffle=True)
+
+#Model 
+inputDim=1
+outputDim=1 
+learningRate=0.1
+
+model = torch.nn.Linear(inputDim, outputDim)
+##### For GPU #######
+if torch.cuda.is_available():
+    model.cuda()
+
+criterion = torch.nn.MSELoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=learningRate)
+
+#Training Loop
+epochs=2000
+
+epoch_array4=np.zeros(epochs)
+loss_array4=np.zeros(epochs)
+for epoch in range(epochs): #Forward Pass and loss
+    for xb,yb in train_dataloader:
+        # Clear gradient buffers because we don't want any gradient from previous epoch to carry forward, dont want to cummulate gradients
+        optimizer.zero_grad()
+
+        # get output from the model, given the inputs
+        outputs = model(xb)
+
+        # get loss for the predicted output
+        loss = criterion(outputs, yb)
+        print(loss)
+        # get gradients w.r.t to parameters, (backward pass)
+        loss.backward()
+
+        # update parameters
+        optimizer.step()
+
+        epoch_array4[epoch]=epoch 
+        loss_array4[epoch]=loss.item()
+
+        print('epoch {}, loss {}'.format(epoch, loss.item()))
+
+with torch.no_grad(): # we don't need gradients in the testing phase
+    predicted = model(train_sSFR)
+    print(predicted)
+plt.plot(train_sSFR.cpu().numpy(), train_n.cpu().numpy(), 'go', label='Training data', alpha=0.5)
+plt.plot(train_sSFR.cpu().numpy(), predicted.cpu().numpy(), '--', label='Predictions', alpha=0.5)
+plt.legend(loc='best')
+plt.show()
+plt.figure()
+
+
+#Testing the model with test datamodel 
+
+predicted_test=model(test_sSFR)
+
+plt.plot(test_sSFR.cpu().numpy(), test_n.cpu().numpy(), 'bo', label='Test data', alpha=0.5)
+plt.plot(test_sSFR.cpu().numpy(), predicted_test.cpu().detach().numpy(), '--', label='Predictions', alpha=0.5)
+plt.legend(loc='best')
+plt.show()
+plt.figure()
+
+predicted_validate=model(validate_sSFR)
+
+plt.plot(validate_sSFR.cpu().numpy(), validate_n.cpu().numpy(), 'ro', label='Validate data', alpha=0.5)
+plt.plot(validate_sSFR.cpu().numpy(), predicted_validate.cpu().detach().numpy(), '--', label='Predictions', alpha=0.5)
+plt.legend(loc='best')
+plt.show()
+plt.figure()
+
+plt.title('Loss vs Epoch for 1D Linear Regression (CUDA) with 1 Hidden Layer')
+plt.plot(epoch_array4,loss_array4)
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.show()
+plt.figure()
