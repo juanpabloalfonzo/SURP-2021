@@ -195,9 +195,15 @@ plt.colorbar().set_label('Average Sersic n')
 plt.xticks(locations,np.around(bins_mass[locations],1))
 plt.yticks(locations,np.around(bins_SFR[locations],1))
 plt.xlabel(r'$log(M/M_{\odot})$')
-plt.ylabel(r'$log(SFR/M_{\odot})$')
+plt.ylabel(r'$log(SFR)$')
 plt.title('Average Sersic n in Various Regions of the log SFR vs log Mass plot')
 
+plt.figure()
+plt.pcolor(bins_mass,bins_SFR,sersic_n_array.transpose())
+plt.xlabel(r'$log(M/M_{\odot})$')
+plt.ylabel(r'$log(SFR)$')
+plt.title('Average Sersic n in Various Regions of the log SFR vs log Mass plot')
+plt.colorbar().set_label('Average Sersic n')
 
 
 plt.figure()
