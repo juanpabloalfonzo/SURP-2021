@@ -1,3 +1,1 @@
-train_n=log_n[0:2183]
-test_n=log_n[2183:2910]
-validate_n=log_n[2910:3638]
+validate_dl=DataLoader(validate_ds,batch_size=64,shuffle=True)
