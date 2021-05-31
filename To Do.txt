@@ -1,10 +1,10 @@
-Generalize what I have for x number of inputs, n is still the label (for morphological reference)
-
-
-Relud activation function (check bookmarks)
-
-4 levels of increasing complexity:
-predict single morphology variable (sersic) based on star-formation variable (sSFR)
 predict single morphology variable (sersic) based on multiple star-formation variables (M*, SFR and more)
 predict star formation variables (sSFR, SFR, M*, age) based on visual morphology (galaxy image)
 predict star formation history (SFR at all times) based on visual morphology (galaxy image) or spectral datacubes (cube.flux).
+
+
+To do:
+-Try and get rid of the activation function plane being created in the data 
+    -Rescale data
+    -Play around with hyperparameters (hidden size, learning rate, epochs)
+    -Play around with layers, both number of layers and types of layers 
