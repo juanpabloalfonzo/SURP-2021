@@ -5,6 +5,6 @@ predict star formation history (SFR at all times) based on visual morphology (ga
 
 To do:
 -Try and get rid of the activation function plane being created in the data 
-    -Rescale data
-    -Play around with hyperparameters (hidden size, learning rate, epochs)
+    -Rescale data (Done)
+    -Play around with hyperparameters (hidden size, learning rate, epochs) (Done)
     -Play around with layers, both number of layers and types of layers 
