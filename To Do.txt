@@ -1,10 +1,10 @@
-predict single morphology variable (sersic) based on multiple star-formation variables (M*, SFR and more)
+
 predict star formation variables (sSFR, SFR, M*, age) based on visual morphology (galaxy image)
 predict star formation history (SFR at all times) based on visual morphology (galaxy image) or spectral datacubes (cube.flux).
 
 
 To do:
--Try and get rid of the activation function plane being created in the data 
-    -Rescale data (Done)
-    -Play around with hyperparameters (hidden size, learning rate, epochs) (Done)
-    -Play around with layers, both number of layers and types of layers 
+-Prep the data properly for the CNN. Where to put all the images? One combined directory? Leave it as is in SAS
+and find a way to have the code call the right directory everytime it needs it 
+
+-Build the actual CNN 
