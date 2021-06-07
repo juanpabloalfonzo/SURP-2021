@@ -4,7 +4,7 @@ predict star formation history (SFR at all times) based on visual morphology (ga
 
 
 To do:
--Prep the data properly for the CNN. Where to put all the images? One combined directory? Leave it as is in SAS
-and find a way to have the code call the right directory everytime it needs it 
+-Go back to model 2 and try to fix the linearity problem first (i.e no discrete steps), and then play with non-linear activations
+to account for the non linear scatter 
 
--Build the actual CNN 
+-Prep the data properly for the CNN. Use dataloaders, may take a while 
