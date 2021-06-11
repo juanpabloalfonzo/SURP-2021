@@ -572,3 +572,6 @@ plt.xlabel('Epoch')
 plt.ylabel('Loss')
 plt.show()
 plt.figure()
+
+
+ 
