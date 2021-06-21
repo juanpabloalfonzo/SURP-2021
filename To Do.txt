@@ -1,13 +1,19 @@
-
+Long Term Project Goals:
 predict star formation variables (sSFR, SFR, M*, age) based on visual morphology (galaxy image)
 predict star formation history (SFR at all times) based on visual morphology (galaxy image) or spectral datacubes (cube.flux).
 
 
-To do:
--Go back to model 2 and try to fix the linearity problem first (i.e no discrete steps), and then play with non-linear activations
-to account for the non linear scatter 
+Completed:
+-check effects of the +1 to initial images - does removing this change the results - does it make things better or worse?
+    Had no effect on the training 
 
--Prep the data properly for the CNN. Use dataloaders, may take a while 
--To make ImageFolder function be easy to index take the plate-ifu from table and put them in alphanumerical order
-as that is how ImageFolder goes about its indexing 
--Too much data to put into GPU all at once, could try scailing down images, need to understand where the model gets labels from 
+
+To do:
+-check true vs predicted SFR, M*, sersic. Starting with making sure SFR works first before trying other variables 
+-Make train and test plots that compare predicted SFR to true SFR to check how the network is preforming 
+    -Make list holding these values into proper arrays
+    -Maybe modify the network arch   
+
+
+
+-make summary plots - maybe show a batch of images with their manga_id, true SFR, predicted SFR and redshift written on the image.
