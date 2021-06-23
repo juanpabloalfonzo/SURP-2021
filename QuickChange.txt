@@ -1,1 +1,42 @@
-validate_dl=DataLoader(validate_ds,batch_size=64,shuffle=True)
+all_truths_train = [] 
+all_preds_train = [] 
+for (data,target) in test_loader:
+    data, target = data.to(device), target.to(device)
+    output=model(data)
+    all_truths_train.append(target.cpu().detach().numpy())
+    all_preds_train.append(output.cpu().detach().numpy()) 
+
+incomplete_batch_id_train=64
+
+remainder_train=31
+
+total_values_train=(len(all_truths_train)*batch_size)-(batch_size-remainder_train)
+
+
+
+all_truths_train_array=np.zeros(total_values_train)
+all_preds_train_array=np.zeros(total_values_train)
+k=0
+while k < total_values_train:
+    for i in range(len(all_truths_train)):
+        if i<incomplete_batch_id_train:
+            for j in range(batch_size):
+                all_truths_train_array[k]=all_truths_train[i][j]
+                all_preds_train_array[k]=all_preds_train[i][j]
+                k=k+1
+                
+
+
+        else:
+            i=incomplete_batch_id_train
+            for j in range(remainder_train):
+                all_truths_train_array[k]=all_truths_train[i][j]
+                all_preds_train_array[k]=all_preds_train[i][j]
+                k=k+1
+                
+
+
+
+all_truths_train_array=all_truths_train
+all_preds_train_array=all_preds_train
+
