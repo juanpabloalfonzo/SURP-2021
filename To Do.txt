@@ -2,18 +2,17 @@ Long Term Project Goals:
 predict star formation variables (sSFR, SFR, M*, age) based on visual morphology (galaxy image)
 predict star formation history (SFR at all times) based on visual morphology (galaxy image) or spectral datacubes (cube.flux).
 
-
-Completed:
--check effects of the +1 to initial images - does removing this change the results - does it make things better or worse?
-    Had no effect on the training 
-
-
-To do:
--check true vs predicted SFR, M*, sersic. Starting with making sure SFR works first before trying other variables 
--Make train and test plots that compare predicted SFR to true SFR to check how the network is preforming 
-    -Make list holding these values into proper arrays
-    -Maybe modify the network arch   
-
-
+   
 
 -make summary plots - maybe show a batch of images with their manga_id, true SFR, predicted SFR and redshift written on the image.
+
+
+few things to try before tweaking the network architecture:
+
+add the R^2 or MSE to the plots - that'll really help quantify everything - and maybe start putting together a table where you record these so that you can go back later and see exactly what changing different things does (and maybe a plt.savefig() at the end so that the files automatically get saved when you generate them).
+what's the effect of varying batch size? i would like us to understand that better and maybe converge on an optimal batch size.
+
+get the summary figure up and running - true & predicted SFR for ~6-10 galaxies - that'll be a really good diagnostic in the long run. 
+how do the galaxies look for (i) randomly sampled subsets, (ii) the best SFR reconstructions, and (iii) the worst SFR reconstructions
+
+how does the network behave for mass and sersic instead of / in addition to SFR? does it do better or worse for each of these things?
