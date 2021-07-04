@@ -1,52 +1,6 @@
-all_truths_test = [] 
-all_preds_test = [] 
-all_mangaid_test=[]
-all_z_test=[]
-for (data,target,target1,target2) in test_loader:
-    data, target = data.to(device), target.to(device)
-    output=model(data)
-    all_truths_test.append(target.cpu().detach().numpy())
-    all_preds_test.append(output.cpu().detach().numpy()) 
-    all_mangaid_test.append(target1)
-    all_z_test.append(target2)
-
-
-incomplete_batch_id_test=len(all_truths_test)-1
-
-remainder_test=len(all_truths_test[incomplete_batch_id_test])
-
-total_values_test=(len(all_truths_test)*batch_size)-(batch_size-remainder_test)
-
-
-
-all_truths_test_array=np.zeros(total_values_test)
-all_preds_test_array=np.zeros(total_values_test)
-all_mangaid_test_array=[]
-all_z_test_array=np.zeros(total_values_test)
-k=0
-while k < total_values_test:
-    for i in range(len(all_truths_test)):
-        if i<incomplete_batch_id_test:
-            for j in range(batch_size):
-                all_truths_test_array[k]=all_truths_test[i][j]
-                all_preds_test_array[k]=all_preds_test[i][j]
-                all_mangaid_test_array.append(all_mangaid_test[i][j])
-                all_z_test_array[k]=all_z_test[i][j]
-                k=k+1
-                
-
-
-        else:
-            i=incomplete_batch_id_test
-            for j in range(remainder_test):
-                all_truths_test_array[k]=all_truths_test[i][j]
-                all_preds_test_array[k]=all_preds_test[i][j]
-                all_mangaid_test_array.append(all_mangaid_test[i][j])
-                all_z_test_array[k]=all_z_test[i][j]
-                k=k+1
-                
-
-
-
-# all_truths_test=all_truths_test_array
-# all_preds_test=all_preds_test_array
+plt.subplot(2,4,4)
+plt.imshow(all_images_train_array[i_8])
+plt.text(x_loc,y_loc,'True log SFR='+str(round(all_truths_train_array[i_8],5)),color='white')
+plt.text(x_loc,y_loc2,'Pred log SFR='+str(round(all_preds_train_array[i_8],5)),color='white')
+plt.text(x_loc,y_loc1,'Manga-id:'+all_mangaid_train_array[i_8],color='white')
+plt.text(x_loc,y_loc3,'z:'+str(round(all_z_train_array[i_8],5)),color='white')
