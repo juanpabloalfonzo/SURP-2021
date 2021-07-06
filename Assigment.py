@@ -18,6 +18,11 @@ import torch
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
+
+import seaborn as sns
+sns.set(font_scale=1.4)
+sns.set_style('ticks')
+
 # from .base import VACMixIn
 
 # class GZVAC(VACMixIn):
@@ -102,18 +107,18 @@ config.download = True
 data=pd.read_csv('CompleteTable.csv')
 
 
-my_cube1=Cube('7957-12703')
-central_spaxel1=my_cube1.getSpaxel(0,0)
-map1=my_cube1.getMaps()
-image1=Image('7957-12703')
+# my_cube1=Cube('7957-12703')
+# central_spaxel1=my_cube1.getSpaxel(0,0)
+# map1=my_cube1.getMaps()
+# image1=Image('7957-12703')
 
 
-central_spaxel1.flux.plot()
-# plt.show()
+# central_spaxel1.flux.plot()
+# # plt.show()
 
 
-image1.plot()
-# plt.show()
+# image1.plot()
+# # plt.show()
 
 
 
@@ -201,7 +206,7 @@ plt.title('Average Sersic n in Various Regions of the log SFR vs log Mass plot')
 plt.figure()
 plt.pcolor(bins_mass,bins_SFR,sersic_n_array.transpose())
 plt.xlabel(r'$log(M/M_{\odot})$')
-plt.ylabel(r'$log(SFR)$')
+plt.ylabel(r'$log(SFR/M_{\odot})$')
 plt.title('Average Sersic n in Various Regions of the log SFR vs log Mass plot')
 plt.colorbar().set_label('Average Sersic n')
 
