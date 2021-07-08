@@ -1,88 +1,13 @@
-print(all_images_train[0][0].shape)
-print(all_images_train_array[0].shape)
+worst_index_train=np.argsort(-delta_train)[:7]
+worst_index_test=np.argsort(-delta_test)[:3]
 
-
-x_loc=75
-y_loc_truth=110
-y_loc_pred=115
-y_loc_delta=120
-y_loc_z=125
-y_loc_mangaid=130
-
-#Index to chose a galaxy at random 
-i_1=np.random.choice(len(all_truths_train_array))
-i_2=np.random.choice(len(all_truths_train_array))
-i_3=np.random.choice(len(all_truths_train_array))
-i_4=np.random.choice(len(all_truths_train_array)) 
-i_5=np.random.choice(len(all_truths_train_array))  
-i_6=np.random.choice(len(all_truths_train_array)) 
-i_7=np.random.choice(len(all_truths_train_array)) 
-i_8=np.random.choice(len(all_truths_test_array)) 
-i_9=np.random.choice(len(all_truths_test_array)) 
-i_10=np.random.choice(len(all_truths_test_array)) 
-
-plt.figure()
-plt.rc('font',size=8)
-plt.subplot(2,5,1)
-plt.imshow(all_images_train_array[i_1])
-plt.text(x_loc,y_loc_truth,'True log SFR='+str(round(all_truths_train_array[i_1],5)),color='white')
-plt.text(x_loc,y_loc_pred,'Pred log SFR='+str(round(all_preds_train_array[i_1],5)),color='white')
-plt.text(x_loc,y_loc_mangaid,'Manga-id:'+all_mangaid_train_array[i_1],color='white')
-plt.text(x_loc,y_loc_z,'z:'+str(round(all_z_train_array[i_1],5)),color='white')
-plt.subplot(2,5,2)
-plt.imshow(all_images_train_array[i_2])
-plt.text(x_loc,y_loc_truth,'True log SFR='+str(round(all_truths_train_array[i_2],5)),color='white')
-plt.text(x_loc,y_loc_pred,'Pred log SFR='+str(round(all_preds_train_array[i_2],5)),color='white')
-plt.text(x_loc,y_loc_mangaid,'Manga-id:'+all_mangaid_train_array[i_2],color='white')
-plt.text(x_loc,y_loc_z,'z:'+str(round(all_z_train_array[i_2],5)),color='white')
-plt.subplot(2,5,3)
-plt.imshow(all_images_train_array[i_3])
-plt.text(x_loc,y_loc_truth,'True log SFR='+str(round(all_truths_train_array[i_3],5)),color='white')
-plt.text(x_loc,y_loc_pred,'Pred log SFR='+str(round(all_preds_train_array[i_3],5)),color='white')
-plt.text(x_loc,y_loc_mangaid,'Manga-id:'+all_mangaid_train_array[i_3],color='white')
-plt.text(x_loc,y_loc_z,'z:'+str(round(all_z_train_array[i_3],5)),color='white')
-plt.subplot(2,5,4)
-plt.imshow(all_images_train_array[i_4])
-plt.text(x_loc,y_loc_truth,'True log SFR='+str(round(all_truths_train_array[i_4],5)),color='white')
-plt.text(x_loc,y_loc_pred,'Pred log SFR='+str(round(all_preds_train_array[i_4],5)),color='white')
-plt.text(x_loc,y_loc_mangaid,'Manga-id:'+all_mangaid_train_array[i_4],color='white')
-plt.text(x_loc,y_loc_z,'z:'+str(round(all_z_train_array[i_4],5)),color='white')
-plt.subplot(2,5,5)
-plt.imshow(all_images_train_array[i_5])
-plt.text(x_loc,y_loc_truth,'True log SFR='+str(round(all_truths_train_array[i_5],5)),color='white')
-plt.text(x_loc,y_loc_pred,'Pred log SFR='+str(round(all_preds_train_array[i_5],5)),color='white')
-plt.text(x_loc,y_loc_mangaid,'Manga-id:'+all_mangaid_train_array[i_5],color='white')
-plt.text(x_loc,y_loc_z,'z:'+str(round(all_z_train_array[i_5],5)),color='white')
-plt.subplot(2,5,6)
-plt.imshow(all_images_train_array[i_6])
-plt.text(x_loc,y_loc_truth,'True log SFR='+str(round(all_truths_train_array[i_6],5)),color='white')
-plt.text(x_loc,y_loc_pred,'Pred log SFR='+str(round(all_preds_train_array[i_6],5)),color='white')
-plt.text(x_loc,y_loc_mangaid,'Manga-id:'+all_mangaid_train_array[i_6],color='white')
-plt.text(x_loc,y_loc_z,'z:'+str(round(all_z_train_array[i_6],5)),color='white')
-plt.subplot(2,5,7)
-plt.imshow(all_images_train_array[i_7])
-plt.text(x_loc,y_loc_truth,'True log SFR='+str(round(all_truths_train_array[i_7],5)),color='white')
-plt.text(x_loc,y_loc_pred,'Pred log SFR='+str(round(all_preds_train_array[i_7],5)),color='white')
-plt.text(x_loc,y_loc_mangaid,'Manga-id:'+all_mangaid_train_array[i_7],color='white')
-plt.text(x_loc,y_loc_z,'z:'+str(round(all_z_train_array[i_7],5)),color='white')
-plt.subplot(2,5,8)
-plt.imshow(all_images_test_array[i_8])
-plt.text(x_loc,y_loc_truth,'True log SFR='+str(round(all_truths_test_array[i_8],5)),color='white')
-plt.text(x_loc,y_loc_pred,'Pred log SFR='+str(round(all_preds_test_array[i_8],5)),color='white')
-plt.text(x_loc,y_loc_mangaid,'Manga-id:'+all_mangaid_test_array[i_8],color='white')
-plt.text(x_loc,y_loc_z,'z:'+str(round(all_z_test_array[i_8],5)),color='white')
-plt.show()
-plt.subplot(2,5,9)
-plt.imshow(all_images_test_array[i_9])
-plt.text(x_loc,y_loc_truth,'True log SFR='+str(round(all_truths_test_array[i_9],5)),color='white')
-plt.text(x_loc,y_loc_pred,'Pred log SFR='+str(round(all_preds_test_array[i_9],5)),color='white')
-plt.text(x_loc,y_loc_mangaid,'Manga-id:'+all_mangaid_test_array[i_9],color='white')
-plt.text(x_loc,y_loc_z,'z:'+str(round(all_z_test_array[i_9],5)),color='white')
-plt.show()
-plt.subplot(2,5,10)
-plt.imshow(all_images_test_array[i_10])
-plt.text(x_loc,y_loc_truth,'True log SFR='+str(round(all_truths_test_array[i_10],5)),color='white')
-plt.text(x_loc,y_loc_pred,'Pred log SFR='+str(round(all_preds_test_array[i_10],5)),color='white')
-plt.text(x_loc,y_loc_mangaid,'Manga-id:'+all_mangaid_test_array[i_10],color='white')
-plt.text(x_loc,y_loc_z,'z:'+str(round(all_z_test_array[i_10],5)),color='white')
-plt.show()
+i_1=worst_index_train[0]
+i_2=worst_index_train[1]
+i_3=worst_index_train[2]
+i_4=worst_index_train[3] 
+i_5=worst_index_train[4]  
+i_6=worst_index_train[5] 
+i_7=worst_index_train[6] 
+i_8=worst_index_test[0] 
+i_9=worst_index_test[1] 
+i_10=worst_index_test[2] 
