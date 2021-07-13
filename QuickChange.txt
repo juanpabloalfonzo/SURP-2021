@@ -1,13 +1,56 @@
-worst_index_train=np.argsort(-delta_train)[:7]
-worst_index_test=np.argsort(-delta_test)[:3]
+worst_index_train_mangaid=all_mangaid_train_array[worst_index_train]
+worst_index_test_mangaid=all_mangaid_test_array[worst_index_test]
 
-i_1=worst_index_train[0]
-i_2=worst_index_train[1]
-i_3=worst_index_train[2]
-i_4=worst_index_train[3] 
-i_5=worst_index_train[4]  
-i_6=worst_index_train[5] 
-i_7=worst_index_train[6] 
-i_8=worst_index_test[0] 
-i_9=worst_index_test[1] 
-i_10=worst_index_test[2] 
+
+
+counter = 0 
+i_1=worst_index_train[counter]
+counter=counter+1
+while (worst_index_train_mangaid[counter] == worst_index_train_mangaid[counter-1]): 
+    counter=counter+1
+
+i_2=worst_index_train[counter]
+counter=counter+1
+while (worst_index_train_mangaid[counter] == worst_index_train_mangaid[counter-1]): 
+    counter=counter+1
+
+i_3=worst_index_train[counter]
+counter=counter+1
+while (worst_index_train_mangaid[counter] == worst_index_train_mangaid[counter-1]): 
+    counter=counter+1
+
+i_4=worst_index_train[counter]
+counter=counter+1
+while (worst_index_train_mangaid[counter] == worst_index_train_mangaid[counter-1]): 
+    counter=counter+1
+
+i_5=worst_index_train[counter]
+counter=counter+1
+while (worst_index_train_mangaid[counter] == worst_index_train_mangaid[counter-1]): 
+    counter=counter+1
+
+i_6=worst_index_train[counter]
+counter=counter+1
+while (worst_index_train_mangaid[counter] == worst_index_train_mangaid[counter-1]): 
+    counter=counter+1
+
+i_7=worst_index_train[counter]
+counter=counter+1
+while (worst_index_train_mangaid[counter] == worst_index_train_mangaid[counter-1]): 
+    counter=counter+1
+
+counter=0     
+i_8=worst_index_test[counter]
+counter=counter+1
+while (worst_index_test_mangaid[counter] == worst_index_test_mangaid[counter-1]): 
+    counter=counter+1
+
+i_9=worst_index_test[counter]
+counter=counter+1
+while (worst_index_test_mangaid[counter] == worst_index_test_mangaid[counter-1]): 
+    counter=counter+1
+    
+i_10=worst_index_test[counter]
+counter=counter+1
+while (worst_index_test_mangaid[counter] == worst_index_test_mangaid[counter-1]): 
+    counter=counter+1 
