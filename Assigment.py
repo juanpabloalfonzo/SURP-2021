@@ -18,9 +18,10 @@ import torch
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torch.utils.data import TensorDataset
+import matplotlib
 
 import seaborn as sns
-sns.set(font_scale=1.4)
+sns.set(font_scale=2.2)
 sns.set_style('ticks')
 
 # from .base import VACMixIn
@@ -122,14 +123,14 @@ data=pd.read_csv('CompleteTable.csv')
 
 
 
-my_cube2 =Cube('7443-12704')
-central_spaxel2=my_cube2.getSpaxel(0,0)
-central_spaxel2.flux.plot()
-# plt.show()
+# my_cube2 =Cube('7443-12704')
+# central_spaxel2=my_cube2.getSpaxel(0,0)
+# central_spaxel2.flux.plot()
+# # plt.show()
 
 
-image2=Image('7443-12704')
-image2.plot()
+# image2=Image('7443-12704')
+# image2.plot()
 # plt.show()
 
 
@@ -203,13 +204,13 @@ plt.xlabel(r'$log(M/M_{\odot})$')
 plt.ylabel(r'$log(SFR)$')
 plt.title('Average Sersic n in Various Regions of the log SFR vs log Mass plot')
 
-plt.figure()
+plt.figure(figsize=(35,15))
 plt.pcolor(bins_mass,bins_SFR,sersic_n_array.transpose())
-plt.xlabel(r'$log(M/M_{\odot})$')
-plt.ylabel(r'$log(SFR/M_{\odot})$')
-plt.title('Average Sersic n in Various Regions of the log SFR vs log Mass plot')
-plt.colorbar().set_label('Average Sersic n')
-
+plt.xlabel(r'$log(M/M_{\odot})$',fontsize=22)
+plt.ylabel(r'$log(SFR/M_{\odot})$',fontsize=22)
+plt.title('Average Sersic Index in Various Regions of the Log SFR vs Log Mass Plot',fontsize=22)
+plt.colorbar().set_label('Average Sersic Index')
+plt.savefig('Transparent',transparent=True)
 
 plt.figure()
 #Plotting the relevant data 
